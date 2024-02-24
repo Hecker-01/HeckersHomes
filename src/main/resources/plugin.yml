@@ -1,0 +1,5 @@
+name: HeckersHomes
+version: '${project.version}'
+main: net.heckerdev.heckershomes.HeckersHomes
+api-version: '1.20'
+author: Hecker_01
