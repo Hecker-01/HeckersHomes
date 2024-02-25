@@ -15,6 +15,7 @@ public final class HeckersHomes extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        saveDefaultConfig();
         setupPermissions();
         setupListeners();
         setupCommands();

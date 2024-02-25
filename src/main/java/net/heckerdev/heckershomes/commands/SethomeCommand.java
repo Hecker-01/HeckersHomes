@@ -26,10 +26,15 @@ public class SethomeCommand extends BaseCommand{
                 StorageUtil.setMainHome(player, playerLoc.getWorld().getName(), playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), playerLoc.getYaw(), playerLoc.getPitch());
                 player.sendMessage(MiniMessage.miniMessage().deserialize("<green><bold>✔</bold> Successfully set your new main home!"));
             } else {
-                if (StorageUtil.setNewHome(player, args[0], playerLoc.getWorld().getName(), playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), playerLoc.getYaw(), playerLoc.getPitch())) {
-                    player.sendMessage(MiniMessage.miniMessage().deserialize("<green><bold>✔</bold> Successfully set " + args[0] + "!"));
+                if (StorageUtil.getHomeCount(player) >= StorageUtil.getMaxHomes(player)) {
+                    String storeLink = StorageUtil.getMainConfig().getString("store-link");
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<red><bold>❌</bold> You have reached the maximum amount of homes, More home slots can be purchased at <click:OPEN_URL:" + storeLink + ">" + storeLink + "</click>!"));
                 } else {
-                    player.sendMessage(MiniMessage.miniMessage().deserialize("<red><bold>❌</bold> That home already exists, if you want to overwrite that home delete it with /delhome first!"));
+                    if (StorageUtil.setNewHome(player, args[0], playerLoc.getWorld().getName(), playerLoc.getX(), playerLoc.getY(), playerLoc.getZ(), playerLoc.getYaw(), playerLoc.getPitch())) {
+                        player.sendMessage(MiniMessage.miniMessage().deserialize("<green><bold>✔</bold> Successfully set " + args[0] + "!"));
+                    } else {
+                        player.sendMessage(MiniMessage.miniMessage().deserialize("<red><bold>❌</bold> That home already exists, if you want to overwrite that home delete it with /delhome first!"));
+                    }
                 }
             }
         } else {

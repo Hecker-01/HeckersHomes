@@ -1,6 +1,8 @@
 package net.heckerdev.heckershomes.utils;
 
 import co.aikar.commands.annotation.Private;
+import net.heckerdev.heckershomes.HeckersHomes;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,6 +12,15 @@ import java.io.File;
 import java.io.IOException;
 
 public class StorageUtil {
+    public static FileConfiguration getMainConfig() {
+        File playerDataFile = new File(new File(Bukkit.getPluginsFolder(), "HeckersHomes"), "config.yml");
+        return YamlConfiguration.loadConfiguration(playerDataFile);
+    }
+
+    private static File getMainConfigFile(Player player) {
+        return new File(new File(Bukkit.getPluginsFolder(), "HeckersHomes"), "config.yml");
+    }
+
     private static FileConfiguration getPlayerDataConfig(Player player) {
         File playerDataFile = new File(new File(Bukkit.getPluginsFolder()+"/HeckersHomes", "player-data"), player.getUniqueId() + ".yml");
         return YamlConfiguration.loadConfiguration(playerDataFile);
@@ -17,7 +28,24 @@ public class StorageUtil {
 
     private static File getPlayerDataFile(Player player) {
         return new File(new File(Bukkit.getPluginsFolder()+"/HeckersHomes", "player-data"), player.getUniqueId() + ".yml");
+    }
 
+    public static int getHomeCount(Player player) {
+        if (getPlayerDataConfig(player).get("other-homes") != null) {
+            return (getPlayerDataConfig(player).getConfigurationSection("other-homes").getKeys(false).size() + 1);
+        } else return 1;
+    }
+
+    public static int getMaxHomes(Player player) {
+        Permission perms = HeckersHomes.getPermissions();
+        int extraHomes = getPlayerDataConfig(player).getInt("extra-homes", 0);
+        int defaultHomes = getMainConfig().getInt("default-max-homes", 1);
+        int groupHomes = 0;
+        if (getMainConfig().getBoolean("vault-groups.enabled", false)) {
+            String group = perms.getPrimaryGroup(player);
+            groupHomes = getMainConfig().getInt("vault-groups." + group + ".extra-homes", 0);
+        }
+        return defaultHomes + extraHomes + groupHomes;
     }
 
     public static boolean doesHomeExist(Player player, String home) {

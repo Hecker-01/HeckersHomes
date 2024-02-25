@@ -3,3 +3,4 @@ version: '1.0'
 main: net.heckerdev.heckershomes.HeckersHomes
 api-version: '1.20'
 author: Hecker_01
+depend: [Vault, LuckPerms]
