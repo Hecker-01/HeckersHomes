@@ -13,9 +13,9 @@ vault-groups:
     extra-homes: 0
   # other examples
   #vip:
-    #extra-homes: 1
-  #vip+:
     #extra-homes: 2
+  #vipplus:
+    #extra-homes: 4
 
 # Add your store link here
 store-link: "https://store.exmple.net/change-in-config.yml"
