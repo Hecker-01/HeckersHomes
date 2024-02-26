@@ -1,6 +1,5 @@
 package net.heckerdev.heckershomes.utils;
 
-import co.aikar.commands.annotation.Private;
 import net.heckerdev.heckershomes.HeckersHomes;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -128,5 +127,24 @@ public class StorageUtil {
         } else {
             return false;
         }
+    }
+
+    public static boolean giveHomes(Player player, int amount) {
+        try {
+            FileConfiguration playerConf = getPlayerDataConfig(player);
+            int homesNow = playerConf.getInt("extra-homes", 0);
+            playerConf.set("extra-homes", homesNow + amount);
+            playerConf.save(getPlayerDataFile(player));
+        } catch (IOException ignored) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static Object[] getHomes(Player player) {
+        if (getPlayerDataConfig(player).get("other-homes") != null) {
+            return getPlayerDataConfig(player).getConfigurationSection("other-homes").getKeys(false).toArray();
+        } else return null;
     }
 }

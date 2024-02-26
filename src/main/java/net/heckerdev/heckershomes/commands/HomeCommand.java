@@ -24,8 +24,8 @@ public class HomeCommand extends BaseCommand{
     }
 
     @Default
-    @Syntax("(optional) <home>")
-    @CommandCompletion("<home>")
+    @Syntax("(optional) [home]")
+    @CommandCompletion("[home] |")
     public void onDefault(@NotNull CommandSender sender, String[] args) {
         if (!sender.hasPermission("heckershomes.command.home")) {
             sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>⚠ You do not have permission to use this command!"));

@@ -40,6 +40,7 @@ public final class HeckersHomes extends JavaPlugin {
         manager.registerCommand(new ListhomesCommand());
         manager.registerCommand(new SethomeCommand());
         manager.registerCommand(new DelhomeCommand());
+        manager.registerCommand(new GivehomesCommand());
     }
 
     private boolean setupPermissions() {
