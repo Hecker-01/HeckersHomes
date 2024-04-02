@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.Objects;
 import java.util.UUID;
 
+import static org.bukkit.Bukkit.getServer;
+
 public class PlayerJoinListener implements Listener {
 
     private final HeckersHomes plugin;
@@ -25,31 +27,33 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
+        getServer().getScheduler().runTaskAsynchronously(HeckersHomes.getInstance(), () -> {
+            Player player = event.getPlayer();
+            UUID uuid = player.getUniqueId();
 
-        File dataFolder = new File(Bukkit.getPluginsFolder()+"/HeckersHomes", "player-data");
-        if (!dataFolder.exists()) {
-            dataFolder.mkdirs();
-        }
-
-        File playerDataFile = new File(dataFolder, uuid + ".yml");
-        if (!playerDataFile.exists()) {
-            try {
-                playerDataFile.createNewFile();
-            } catch (IOException exception) {
-                Bukkit.getLogger().warning(exception.getMessage());
-                return;
+            File dataFolder = new File(Bukkit.getPluginsFolder() + "/HeckersHomes", "player-data");
+            if (!dataFolder.exists()) {
+                dataFolder.mkdirs();
             }
 
-            FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerDataFile);
-            try {
-                playerData.set("extra-homes", 0);
-                playerData.save(playerDataFile);
-            } catch (IOException exception) {
-                Bukkit.getLogger().warning(exception.getMessage());
-            }
+            File playerDataFile = new File(dataFolder, uuid + ".yml");
+            if (!playerDataFile.exists()) {
+                try {
+                    playerDataFile.createNewFile();
+                } catch (IOException exception) {
+                    Bukkit.getLogger().warning(exception.getMessage());
+                    return;
+                }
 
-        }
+                FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerDataFile);
+                try {
+                    playerData.set("extra-homes", 0);
+                    playerData.save(playerDataFile);
+                } catch (IOException exception) {
+                    Bukkit.getLogger().warning(exception.getMessage());
+                }
+
+            }
+        });
     }
 }
