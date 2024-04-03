@@ -55,10 +55,11 @@ public class HomeCommand extends BaseCommand{
     }
 
     private void executeCommand(Player player, String[] args) {
-        getServer().getScheduler().runTaskAsynchronously(HeckersHomes.getInstance(), () -> {
+        getServer().getScheduler().runTask(HeckersHomes.getInstance(), () -> {
             if (args.length == 0) {
                 if (StorageUtil.doesMainHomeExist(player)) {
                     StorageUtil.getMainHome(player).thenAccept(location -> {
+                        Bukkit.getLogger().info("Teleporting " + player.getName() + " to their main home at " + location.toString());
                         player.teleport(location);
                         player.sendMessage(MiniMessage.miniMessage().deserialize("<green><bold>✔</bold> Successfully sent you to your home!"));
                     });
@@ -68,6 +69,7 @@ public class HomeCommand extends BaseCommand{
             } else {
                 if (StorageUtil.doesHomeExist(player, args[0])) {
                     StorageUtil.getHome(player, args[0]).thenAccept(location -> {
+                        Bukkit.getLogger().info("Teleporting " + player.getName() + " to " + args[0] + " at " + location.toString());
                         player.teleport(location);
                         player.sendMessage(MiniMessage.miniMessage().deserialize("<green><bold>✔</bold> Successfully sent you to " + args[0] + "!"));
                     });
