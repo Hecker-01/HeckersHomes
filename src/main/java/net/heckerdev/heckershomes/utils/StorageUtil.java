@@ -40,10 +40,17 @@ public class StorageUtil {
         int extraHomes = getPlayerDataConfig(player).getInt("extra-homes", 0);
         int defaultHomes = getMainConfig().getInt("default-max-homes", 1);
         int groupHomes = 0;
+
         if (getMainConfig().getBoolean("vault-groups.enabled", false)) {
-            String group = perms.getPrimaryGroup(player);
-            groupHomes = getMainConfig().getInt("vault-groups." + group + ".extra-homes", 0);
+            String[] groups = perms.getPlayerGroups(player);
+            for (String group : groups) {
+                int groupHomesTemp = getMainConfig().getInt("vault-groups." + group + ".extra-homes", 0);
+                if (groupHomesTemp > groupHomes) {
+                    groupHomes = groupHomesTemp;
+                }
+            }
         }
+
         return defaultHomes + extraHomes + groupHomes;
     }
 
